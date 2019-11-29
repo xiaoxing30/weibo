@@ -9,7 +9,7 @@
       </div>
       <div class="card-body">
 
-        @include('shared._errors)
+        @include('shared._errors')
 
         <form method="POST" action="{{ route('users.store') }}">
           {{ csrf_field() }}
