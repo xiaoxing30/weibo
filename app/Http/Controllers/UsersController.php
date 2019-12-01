@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class UsersController extends Controller
 {
@@ -13,7 +14,7 @@ class UsersController extends Controller
         //Laravel 提供身份验证（Auth）中间件来过滤 未登录用户 的 动作。
         //except 方法来设定 指定动作 不使用 Auth 中间件进行过滤，意为 —— 除了此处指定的动作以外，所有其他动作都必须登录用户才能访问，类似于黑名单的过滤机制
         $this->middleware('auth', [
-            'except' => ['show', 'create', 'store', 'index']
+            'except' => ['show', 'create', 'store', 'index','confirmEmail']
         ]);
 
         //Auth 中间件提供的 guest 选项，用于指定一些只允许未登录用户访问的动作。
@@ -69,7 +70,7 @@ class UsersController extends Controller
 
         //让一个已认证通过的用户实例进行登录，可以使用以下方法：
         //Auth::login($user);
-        Auth::login($user);
+        $this->sendEmailConfirmationTo($user);
 
         //Laravel 提供了一种用于临时保存用户数据的方法 - 会话（Session），并附带支持多种会话后端驱动，可通过统一的 API 进行使用。
         //使用 session() 方法来访问会话实例。
@@ -77,13 +78,13 @@ class UsersController extends Controller
         //flash 方法接收两个参数，第一个为会话的键，第二个为会话的值，可以通过下面这行代码的为会话赋值。
         //之后可以使用 session()->get('success') 通过键名来取出对应会话中的数据，取出的结果为：
         //  欢迎，您将在这里开启一段新的旅程~。
-        session()->flash('success', '欢迎，您将在这里开启一段新的旅程~');
+        session()->flash('success', '验证邮箱已发送到你的注册邮箱上，请注意查收。');
 
         //这里是一个『约定优于配置』的体现，
         //此时 $user 是 User 模型对象的实例。
         //route() 方法会自动获取 Model 的主键，也就是数据表 users 的主键 id，以上代码等同于：
         //  redirect()->route('users.show', [$user->id]);
-        return redirect()->route('users.show', [$user]);
+        return redirect('/');
     }
 
     public function edit(User $user)
@@ -126,4 +127,32 @@ class UsersController extends Controller
         session()->flash('success', '成功删除用户！');
         return back();
     }
+
+    protected function sendEmailConfirmationTo($user)
+    {
+        $view = 'emails.confirm';
+        $data = compact('user');
+        $from = 'summer@example.com';
+        $name = 'Summer';
+        $to = $user->email;
+        $subject = '感谢注册 Weibo 应用！请确认你的邮箱。';
+
+        Mail::send($view,$data,function ($message) use ($from,$name,$to,$subject){
+           $message->from($from,$name)->to($to)->subject($subject);
+        });
+    }
+
+    public function confirmEmail($token)
+    {
+        $user = User::where('activation_token',$token)->firstOrFail();
+
+        $user->activated = true;
+        $user->activation_token = null;
+        $user->save();
+
+        Auth::login($user);
+        session()->flash('success','恭喜你，激活成功！');
+        return redirect()->route('users.show',[$user]);
+    }
+
 }

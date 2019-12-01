@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use Illuminate\Support\Str;
 
 class User extends Authenticatable  //Authenticatable 是授权相关功能的引用
 {
@@ -54,4 +54,18 @@ class User extends Authenticatable  //Authenticatable 是授权相关功能的�
         return "http://www.gravatar.com/avatar/$hash?s=$size";
     }
 
+    //boot 方法会在用户模型类完成初始化之后进行加载，因此我们对事件的监听需要放在该方法中。
+    public static function boot()
+    {
+        parent::boot();
+
+        //由 Eloquent 模型触发的一个事件。
+        //事件是 Laravel 提供一种简单的监听器实现，我们可以对事件进行监听和订阅，从而在事件被触发时接收到响应并执行一些指定操作。
+        //Eloquent 模型默认提供了多个事件，我们可以通过其提供的事件来监听到模型的创建，更新，删除，保存等操作。
+        //creating 用于监听模型被创建之前的事件，created 用于监听模型被创建之后的事件。
+        //要生成的用户激活令牌需要在用户模型创建之前生成，因此需要监听的是 creating 方法。
+        static::creating(function ($user){
+            $user->activation_token = Str::random(10);
+        });
+    }
 }
