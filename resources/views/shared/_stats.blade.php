@@ -1,16 +1,16 @@
-<a href="#">
+<a href="{{ route('users.followings',$user->id) }}">
   <strong id="following" class="stat">
     {{ count($user->followings) }}
   </strong>
   关注
 </a>
-<a href="#">
+<a href="{{ route('users.followers',$user->id) }}">
   <strong id="followers" class="stat">
     {{ count($user->followers) }}
   </strong>
   粉丝
 </a>
-<a href="#">
+<a href="{{ route('users.show',$user->id) }}">
   <strong id="statuses" class="stat">
 {{--
         我们通过调用 Eloquent 模型的 count 方法来获取用户发布过的微博数，
