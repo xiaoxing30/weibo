@@ -39,6 +39,11 @@ class User extends Authenticatable  //Authenticatable 是授权相关功能的�
         'email_verified_at' => 'datetime',
     ];
 
+    public function statuses()
+    {
+        return $this->hasMany(Status::class);
+    }
+
     /*
      * 该方法主要做了以下几个操作：
      * 1.为 gravatar 方法传递的参数 size 指定了默认值 100；

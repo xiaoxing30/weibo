@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="57c93b13-ffeb-493a-8182-84652d329b61" name="Default Changelist" comment="" />
+    <list default="true" id="57c93b13-ffeb-493a-8182-84652d329b61" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/database/migrations/2019_12_01_071750_create_statuses_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -210,7 +214,7 @@
       <workItem from="1574933229800" duration="1245000" />
       <workItem from="1575010897125" duration="25921000" />
       <workItem from="1575170317380" duration="8764000" />
-      <workItem from="1575181801430" duration="2326000" />
+      <workItem from="1575181801430" duration="3366000" />
     </task>
     <servers />
   </component>
