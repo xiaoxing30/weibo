@@ -50,7 +50,11 @@ class UsersController extends Controller
     {
         //将用户对象 $user 通过 compact 方法转化为一个关联数组，
         //并作为第二个参数传递给 view 方法，将数据与视图进行绑定。
-        return view('users.show', compact('user'));
+
+        $statuses = $user->statuses()
+                            ->orderBy('created_at','desc')
+                            ->paginate(10);
+        return view('users.show', compact('user','statuses'));
     }
 
     public function store(Request $request)
