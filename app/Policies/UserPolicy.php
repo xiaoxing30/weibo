@@ -24,6 +24,7 @@ class UserPolicy
         return $currentUser->id === $user->id;
     }
 
+    //在删除动作的授权中，规定只有当前用户为管理员，且被删除用户不是自己时，授权才能通过。
     public function destroy(User $currentUser, User $user)
     {
         return $currentUser->is_admin && $currentUser->id !== $user->id;

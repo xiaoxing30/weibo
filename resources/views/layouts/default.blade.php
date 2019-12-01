@@ -16,7 +16,7 @@
                 @include('layouts._footer')
             </div>
         </div>
-
+{{--        在全局默认视图中引用编译后的 app.js 文件。--}}
     <script src="{{ mix('js/app.js') }}"></script>
     </body>
 </html>
